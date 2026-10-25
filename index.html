@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeSphere AI - Personal & Digital Safety Companion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <div class="shield-logo">🛡️</div>
+      <div><h1 class="app-title">SafeSphere AI</h1><p class="app-tagline">Your safety. Your privacy. Your control.</p></div>
+    </div>
+    <div class="header-status"><span class="status-badge gps-badge" id="gps-status-badge">📡 GPS Ready</span><span class="status-badge privacy-badge">🔒 Local Vault Active</span></div>
+  </header>
+  <main class="app-container">
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('sos-tab')" id="tab-sos">🚨 SOS & Physical Safety</button>
+      <button class="tab-btn" onclick="switchTab('threatlens-tab')" id="tab-threatlens">🔍 AI ThreatLens</button>
+      <button class="tab-btn" onclick="switchTab('vault-tab')" id="tab-vault">🔐 Private Vault</button>
+      <button class="tab-btn" onclick="switchTab('settings-tab')" id="tab-settings">⚙️ Settings & Contacts</button>
+    </nav>
+    <section id="sos-tab" class="tab-content active">
+      <div class="grid-2col">
+        <div class="card sos-card">
+          <div class="card-header"><h2>Discreet SOS Emergency Trigger</h2><span class="badge danger-badge">Live Action</span></div>
+          <p class="card-desc">Starts a short countdown, records an incident locally, and offers emergency calling. This demo does not automatically contact emergency services or send messages.</p>
+          <div class="sos-button-wrapper"><button class="sos-main-btn" id="sos-trigger-btn" onclick="triggerSOS()"><span class="sos-icon">🚨</span><span class="sos-text">TRIGGER SOS</span></button></div>
+          <div id="sos-countdown" class="sos-countdown hidden"><p class="countdown-text">Emergency action in <span id="timer-seconds">5</span>s...</p><button class="btn btn-secondary" onclick="cancelSOS()">CANCEL</button></div>
+          <div id="sos-status-box" class="status-box hidden"></div>
+          <div class="location-details-box"><h3>📍 Location Data</h3><p id="location-coords">Latitude: Waiting for permission | Longitude: Waiting for permission</p><p id="location-address" class="text-subtle">Location access requires browser permission.</p><div class="button-row"><button class="btn btn-sm" onclick="getGPSLocation()">🔄 Refresh GPS</button><a id="gmaps-link" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-outline hidden">🗺️ Open in Google Maps</a></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>Direct Emergency Helplines</h2><span class="badge info-badge">1-Tap Dial</span></div>
+          <div class="quick-dials-grid">
+            <a href="tel:112" class="dial-card"><span class="dial-icon">👮</span><div class="dial-info"><strong>Emergency Services</strong><span>Dial 112 (India)</span></div></a>
+            <a href="tel:1091" class="dial-card"><span class="dial-icon">👩</span><div class="dial-info"><strong>Women Helpline</strong><span>Dial 1091 (availability varies)</span></div></a>
+            <a href="tel:108" class="dial-card"><span class="dial-icon">🚑</span><div class="dial-info"><strong>Ambulance Service</strong><span>Dial 108 (availability varies)</span></div></a>
+          </div>
+          <hr class="divider"><h3>Emergency Contact SMS</h3><p class="text-subtle">Opens your device's messaging app with a draft. You must review and send it yourself.</p><button class="btn btn-danger btn-full" onclick="sendEmergencySMS()">📱 Prepare Emergency SMS Draft</button>
+          <hr class="divider"><h3>Deterrent & De-escalation Utilities</h3><div class="button-row"><button class="btn btn-warning" id="siren-btn" onclick="toggleSiren()">🔊 Loud Siren Alarm</button><button class="btn btn-secondary" onclick="triggerFakeCall()">📞 Simulate Fake Call</button></div>
+        </div>
+      </div>
+      <div class="card margin-top"><div class="card-header"><h2>Evidence Camera Snapshot</h2><span class="badge dark-badge">Local Browser Demo</span></div><p class="card-desc">Only capture evidence when it is safe and lawful to do so. Photos are stored in this browser's local storage and are not encrypted by this demo.</p>
+        <div class="camera-container"><div class="video-preview-box"><video id="webcam-feed" autoplay playsinline muted></video><canvas id="photo-canvas" class="hidden"></canvas><div id="camera-placeholder" class="camera-placeholder"><p>📷 Camera Feed Inactive</p><button class="btn btn-primary" onclick="startCamera()">Turn On Camera</button></div></div><div class="camera-controls"><button class="btn btn-success" id="capture-btn" onclick="capturePhoto()" disabled>📸 Take Photo Snapshot</button><button class="btn btn-danger" id="stop-cam-btn" onclick="stopCamera()" disabled>🔴 Stop Camera</button></div></div><div id="captured-photos-gallery" class="gallery-grid"></div>
+      </div>
+    </section>
+    <section id="threatlens-tab" class="tab-content"><div class="card"><div class="card-header"><h2>AI ThreatLens — Digital Message Threat Analyzer</h2><span class="badge ai-badge">Rule-based demo</span></div><p class="card-desc">Paste suspicious messages, DMs, emails, or texts. This local rule-based demo looks for possible signs of coercion, stalking, and phishing. It is not a trained AI model and may make mistakes.</p>
+      <div class="form-group"><label for="threat-input-text">Suspicious Text or Message Content:</label><div class="sample-pills"><span>Try Sample:</span><button class="pill" onclick="loadSampleText(1)">Blackmail / Coercion</button><button class="pill" onclick="loadSampleText(2)">Stalking / Tracking</button><button class="pill" onclick="loadSampleText(3)">Phishing / Scam</button><button class="pill" onclick="loadSampleText(4)">Friendly Message</button></div><textarea id="threat-input-text" rows="5" placeholder="Paste suspicious message, email, or DM text here..."></textarea></div>
+      <div class="button-row"><button class="btn btn-primary" onclick="analyzeTextWithAI()">🔍 Scan & Analyze Message</button><button class="btn btn-outline" onclick="clearThreatInput()">Clear Text</button></div>
+      <div id="threat-results-box" class="analysis-results-card hidden"><div class="results-header"><h3>Analysis Results</h3><div id="risk-score-badge" class="risk-badge">Not analyzed</div></div><div class="analysis-section"><h4>⚠️ Warning Signs & Risk Indicators</h4><ul id="risk-factors-list" class="styled-list"></ul></div><div class="analysis-section"><h4>💬 Highlighted Concerning Phrases</h4><div id="flagged-phrases-box" class="phrase-tags"></div></div><div class="analysis-section"><h4>🛡️ Recommended Safe Actions</h4><ul id="recommended-actions-list" class="styled-list"></ul></div><div class="card-footer-action"><button class="btn btn-dark" onclick="saveThreatAnalysisToVault()">💾 Save Analysis to Private Vault</button></div></div>
+    </div></section>
+    <section id="vault-tab" class="tab-content"><div class="card"><div class="card-header"><h2>Private Incident Vault</h2><span class="badge privacy-badge">Browser-local demo</span></div><p class="card-desc">Records are saved in this browser's localStorage. This is not an encrypted vault; avoid storing highly sensitive information on shared devices.</p><div class="button-row"><button class="btn btn-primary" onclick="createNewManualIncident()">➕ Log Manual Incident Note</button><button class="btn btn-secondary" onclick="exportVaultData()">📥 Export Vault (JSON)</button><button class="btn btn-outline-danger" onclick="clearVaultData()">🗑️ Clear Vault</button></div><div class="vault-records-list" id="vault-records-list"></div></div></section>
+    <section id="settings-tab" class="tab-content"><div class="card"><div class="card-header"><h2>Profile & Emergency Contact Settings</h2><span class="badge info-badge">Local Preferences</span></div><p class="card-desc">Set trusted contacts. Settings are stored in browser localStorage on this device.</p>
+      <form id="settings-form" onsubmit="saveUserSettings(event)"><div class="form-grid"><div class="form-group"><label for="user-full-name">Your Full Name:</label><input type="text" id="user-full-name" placeholder="Your name"></div><div class="form-group"><label for="user-phone">Your Phone Number:</label><input type="tel" id="user-phone" placeholder="+91 ..."></div><div class="form-group"><label for="parent-contact-1">Primary Trusted Contact:</label><input type="tel" id="parent-contact-1" placeholder="+91 ..."></div><div class="form-group"><label for="parent-contact-2">Secondary Trusted Contact:</label><input type="tel" id="parent-contact-2" placeholder="+91 ..."></div></div><div class="form-group"><label for="sos-custom-message">Custom SOS Distress Message:</label><textarea id="sos-custom-message" rows="3">EMERGENCY SOS: I need immediate help!</textarea></div><div class="button-row"><button type="submit" class="btn btn-primary">💾 Save Settings</button></div></form>
+    </div></section>
+  </main>
+  <div id="fake-call-modal" class="fake-call-overlay hidden"><div class="fake-call-card"><div class="caller-avatar">👤</div><h3>Incoming Call...</h3><p class="caller-name" id="fake-caller-name">Trusted Contact</p><p class="caller-sub">Simulated call — no real call is placed.</p><div class="call-actions"><button class="call-btn accept-btn" onclick="endFakeCall()">📞 Accept</button><button class="call-btn decline-btn" onclick="endFakeCall()">❌ Decline</button></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
